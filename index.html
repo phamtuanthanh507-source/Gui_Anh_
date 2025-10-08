@@ -31,14 +31,14 @@
   }
 
   .card {
-    width: min(480px, 86vw);
+    width: min(420px, 86vw);
     aspect-ratio: 9 / 16;
     display:flex;
     align-items:center;
     justify-content:center;
     position: relative;
     z-index: 5;
-    transform: scale(1.2);
+    transform: scale(1);
     transform-origin: center;
   }
 
@@ -109,14 +109,14 @@
   /* 💌 Note */
   .note {
     position: absolute;
-    width: 68%;
+    width: %;
     left: 50%;
     top: 20%;
     transform: translate(-50%, 80%) scale(0.8);
     background: linear-gradient(180deg, #fff 0%, var(--paper) 100%);
-    border-radius: 12px;
+    border-radius: 10px;
     box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-    padding: 14px;
+    padding: px;
     text-align: center;
     opacity: 0;
     z-index: 4;
@@ -129,33 +129,33 @@
   @keyframes popNote {
     0% { opacity: 0; transform: translate(-70%, 80%) scale(0.8); }
     20% { opacity: 1; transform: translate(-60%, 50%) scale(1.05); }
-    60% { transform: translate(-50%, 400%) scale(1); }
-    75% { transform: translate(-50%, 400%) scale(0.98); }
-    100% { opacity: 1; transform: translate(-50%, 400%) scale(1); }
+    60% { transform: translate(-50%, 500%) scale(1); }
+    75% { transform: translate(-50%, 500%) scale(0.98); }
+    100% { opacity: 1; transform: translate(-50%, 500%) scale(1); }
   }
 
   /* 📄 Thư */
   .letter {
     position: fixed;
     top: 50%; left: 50%;
-    transform: translate(-50%, -50%) scale(0.9);
-    width: min(400px, 86vw);
+    transform: translate(-50%, -50%) scale(0.);
+    width: min(380px, 86vw);
     background: linear-gradient(180deg,#fff,#fff9fb);
     border-radius:14px;
     box-shadow:0 18px 40px rgba(0,0,0,0.14);
-    padding:22px;
+    padding:20px;
     opacity:0;
     pointer-events:none;
     transform-origin:center;
     transition: all .45s cubic-bezier(.2,.9,.3,1);
     z-index:7;
-    max-height:80%;
+    max-height:75%;
     overflow:auto;
   }
   .letter.open{ opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); }
 
   .lines{ display:flex; flex-direction:column; gap:10px; margin-top:6px; }
-  .line{ height:12px; background:linear-gradient(90deg,rgba(0,0,0,0.08),rgba(0,0,0,0.04)); border-radius:6px; opacity:0; transform:translateY(6px); transition:all .38s cubic-bezier(.25,.9,.3,1);}
+  .line{ height:10px; background:linear-gradient(90deg,rgba(0,0,0,0.08),rgba(0,0,0,0.04)); border-radius:6px; opacity:0; transform:translateY(6px); transition:all .38s cubic-bezier(.25,.9,.3,1);}
   .line.show{ opacity:1; transform:translateY(0); }
 
   .letter h3{ margin:0 0 8px; font-size:18px; color:var(--accent); text-align:center;}
@@ -292,10 +292,16 @@
         <img src="nắp.png" alt="phong bì nắp" class="envelope-lid" id="lid">
       </div>
 
-      <!-- 📝 Hướng dẫn -->
+      <!-- 📝 Hướng dẫn 1 -->
       <div class="guide" id="guide">
         <div class="arrow"></div>
-        <div class="guide-text">Nhấn vào lá thư để mở nhé 💌</div>
+        <div class="guide-text">Anh nhấn vô lá thư để mở nhé 💌</div>
+      </div>
+
+      <!-- 📝 Hướng dẫn 2 -->
+      <div class="guide guide-letter" id="guideLetter" style="display: none;">
+        <div class="arrow"></div>
+        <div class="guide-text">Anh nhấn tiếp đi 💌</div>
       </div>
 
     </div>
@@ -346,17 +352,37 @@
     }
   }
 
-  clickArea.addEventListener('click', ()=>{
-    // Ẩn hướng dẫn khi click lần đầu
-    if (guide) {
-      guide.style.animation = 'fadeOut 0.6s forwards';
-      setTimeout(()=>guide.remove(), 600);
-    }
+  clickArea.addEventListener('click', () => {
+  // Ẩn hướng dẫn 1 khi click lần đầu
+  if (guide) {
+    guide.style.animation = 'fadeOut 0.6s forwards';
+    setTimeout(() => guide.remove(), 600);
+  }
 
-    if(state===0) toState(1);
-    else if(state===1) toState(2);
-    else toState(0);
-  });
+  // 🩷 Click 1 → hiện hướng dẫn 2 + mở nắp
+  if (state === 0) {
+    if (guideLetter) {
+      guideLetter.style.display = 'flex';
+      guideLetter.style.animation = 'fadeIn 1s ease forwards';
+    }
+    toState(1);
+  }
+
+  // 🩵 Click 2 → mở thư + ẩn hướng dẫn 2
+  else if (state === 1) {
+    if (guideLetter) {
+      guideLetter.style.animation = 'fadeOut 0.6s forwards';
+      setTimeout(() => guideLetter.remove(), 600);
+    }
+    toState(2);
+  }
+
+  // 🌀 Click 3 → reset
+  else {
+    toState(0);
+  }
+});
+
 
   // ✨ Bling
   const container = document.getElementById('blingContainer');
@@ -388,4 +414,3 @@
 </script>
 </body>
 </html>
-
